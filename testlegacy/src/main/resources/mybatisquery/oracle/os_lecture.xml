@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+          "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kos.testlegacy.os.lecture.dao.OsLectureDAO" >
+
+<select id="osLectureSelectOne" resultType="oslecturevo" parameterType="oslecturevo">
+	SELECT * FROM (
+		SELECT 	A.LNUM 		LNUM
+		       ,A.LNAME 	LNAME
+		       ,A.LCUR 	    LCUR
+		       ,A.LFILE 	LFILE
+		       ,A.LPRICE    LPRICE
+		       ,A.LHIT         LHIT
+		       ,TO_CHAR(A.INSERTDATE, 'YYYY-MM-DD') INSERTDATE
+		       ,TO_CHAR(A.UPDATEDATE, 'YYYY-MM-DD') UPDATEDATE
+		       ,A.DELETEYN      DELETEYN
+		FROM 	LECTURE_TABLE A
+		WHERE 	A.DELETEYN = 'Y' AND A.LNUM =#{lnum}
+	) 
+</select>
+
+<select id="osLectureSelectAll" resultType="oslecturevo" parameterType="oslecturevo">
+   SELECT * FROM (
+      SELECT    A.LNUM       LNUM
+             ,A.LNAME    LNAME
+             ,A.LCUR        LCUR
+             ,A.LFILE    LFILE
+             ,A.LPRICE	LPRICE
+             ,TO_CHAR(A.INSERTDATE, 'YYYY-MM-DD') INSERTDATE
+             ,TO_CHAR(A.UPDATEDATE, 'YYYY-MM-DD') UPDATEDATE
+             ,A.DELETEYN      DELETEYN
+             ,A.LHIT         LHIT
+                       <!--  ? : 페이지 사이즈 : pageSize  -->
+             ,CEIL(ROW_NUMBER() OVER(ORDER BY A.LNUM)/ #{pageSize} ) pageSize      
+            ,COUNT(A.LNUM) OVER() AS totalCount        
+      FROM    LECTURE_TABLE A
+      WHERE    A.DELETEYN = 'Y' AND A.LNAME = #{lname}
+      ORDER BY 1 DESC 
+       <!--  ? : 현재 페이지 : curPage -->
+   ) WHERE pageSize = #{curPage}
+</select>
+<select id="osLectureSelect" resultType="oslecturevo" parameterType="oslecturevo">
+    SELECT 
+        A.LNUM  LNUM,
+        A.LNAME  LNAME,
+        A.LFILE  LFILE,
+        A.LCUR  LCUR,
+       A.LHIT         LHIT,
+        A.LPRICE  LPRICE
+    FROM LECTURE_TABLE A
+    WHERE DELETEYN='Y'
+    <if test="searchFilter == 'key_01'">
+      <![CDATA[ AND A.LNUM LIKE '%' || #{keyword, jdbcType=VARCHAR} || '%']]>
+    </if>
+    <if test="searchFilter == 'key_02'">
+        <![CDATA[ AND A.LNAME LIKE '%' || #{keyword, jdbcType=VARCHAR} || '%']]>
+    </if>
+    
+    <!-- 
+    AND A.LNUM =  #{keyword, jdbcType=VARCHAR}
+     -->
+         
+</select>
+
+<select id="osLectureSelectMain" resultType="oslecturevo" parameterType="oslecturevo">
+    SELECT 
+        A.LNUM  LNUM,
+        A.LNAME  LNAME,
+        A.LFILE  LFILE,
+        A.LCUR  LCUR,
+        A.LPRICE  LPRICE,
+       A.LHIT         LHIT
+    FROM LECTURE_TABLE A
+    WHERE DELETEYN='Y'
+     <if test="searchValue != null ">
+        <![CDATA[ AND A.LCUR LIKE '%' || #{searchValue, jdbcType=VARCHAR} || '%']]>
+    </if>
+    
+    <!-- 
+    AND A.LNUM =  #{keyword, jdbcType=VARCHAR}
+     -->
+         
+</select>
+
+<update id="osBoardLhit" parameterType="oslecturevo" >
+ 
+   UPDATE  LECTURE_TABLE 
+      SET LHIT = (SELECT NVL(MAX(LHIT), 0) + 1 FROM LECTURE_TABLE WHERE DELETEYN = 'Y' AND LNUM = #{lnum})
+         ,UPDATEDATE = SYSDATE  
+   WHERE   DELETEYN = 'Y'
+   AND     LNUM = #{lnum}    
+</update>
+
+</mapper>

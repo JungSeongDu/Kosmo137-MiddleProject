@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+          "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+          
+<mapper namespace="com.kos.testlegacy.os.mem.dao.OsMemDAO" >
+
+<select id="idCheck" resultType="osmemvo" parameterType="osmemvo">
+	SELECT
+			A.MID MID
+	FROM    MEMBER_TABLE A
+	WHERE   A.DELETEYN = 'Y'
+	AND		A.MID = #{mid}
+</select>
+
+<insert id="osMemInsert" parameterType="osmemvo">
+	INSERT INTO MEMBER_TABLE 
+							 (  KNUM
+							  , MID
+							  , MPW
+							  , MNAME
+							  , MTEL
+							  , MEMAIL
+							  , DELETEYN
+							  , INSERTDATE
+							  , UPDATEDATE)
+					   VALUES
+					   		( (SELECT NVL(MAX(A.KNUM), 0) + 1 AS CHABUN FROM MEMBER_TABLE A)
+					   		  ,#{mid}
+					   		  ,#{mpw}
+					   		  ,#{mname}
+					   		  ,#{mtel}
+					   		  ,#{memail}
+					   		  ,'Y'
+					   		  ,SYSDATE
+					   		  ,SYSDATE
+					   		)
+</insert>
+
+<select id="loginCheck" resultType="osmemvo" parameterType="osmemvo">
+	SELECT
+			A.MID		MID
+		   ,A.MPW		MPW
+	FROM	MEMBER_TABLE A
+	WHERE A.DELETEYN = 'Y'
+	AND A.MID = #{mid, jdbcType = VARCHAR}
+	AND A.MPW = #{mpw, jdbcType = VARCHAR}
+</select>
+
+<select id="mypageCheck" resultType="osmemvo" parameterType="osmemvo">
+	SELECT
+			A.MID		MID
+		   ,A.MPW		MPW
+		   ,A.MNAME		MNAME
+		   ,A.MTEL		MTEL
+		   ,A.MEMAIL	MEMAIL
+	FROM	MEMBER_TABLE A
+	WHERE A.DELETEYN = 'Y'
+	AND A.MID = #{mid, jdbcType = VARCHAR}
+	AND A.MPW = #{mpw, jdbcType = VARCHAR}
+</select>
+
+<select id="byCheck" resultType="osbuyvo" parameterType="osbuyvo">
+	SELECT A.LNAME  LNAME,
+		   A.LNUM	LNUM,
+		    A.LFILE	LFILE,
+		    A.LCUR LCUR
+	FROM   BUY_TABLE A
+    WHERE  A.MID = #{mid}
+</select>
+<select id="idFindSelect" resultType="osmemvo" parameterType="osmemvo" >
+	SELECT A.MEMAIL MEMAIL
+	FROM   MEMBER_TABLE A
+	WHERE MID = #{mid}
+</select>
+
+<update id="mypageUpdate" parameterType="osmemvo">
+
+	UPDATE 	MEMBER_TABLE
+	SET 	
+			 MPW = #{mpw}
+			,MNAME = #{mname}
+			,MTEL = #{mtel}
+			,MEMAIL = #{memail}
+	WHERE 	DELETEYN = 'Y' 
+	AND 	MID = #{mid}
+	
+</update>
+
+<update id="mypageDelete" parameterType="osmemvo" >
+
+	UPDATE 	MEMBER_TABLE 
+		SET 	DELETEYN = 'N'		
+		WHERE MID = #{mid} 
+</update>
+
+</mapper>      

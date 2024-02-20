@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<script  src="http://code.jquery.com/jquery-latest.min.js"></script>
+<script type="text/javascript">
+
+	function test(){
+	    var text_data = $('#weather_id').val();
+	    $.ajax({
+	            type : 'GET',                                     <!--GET / POST-->
+	            url : 'http://127.0.0.1:5001/rss',
+	            data : {
+	            		weather_id:text_data                      <!--key : "value"-->
+	            },
+	            dataType : 'JSON',
+	            success : function(result){
+	                    alert("result = "+ result);
+	                    $('#a').html(result);
+	            },
+	            error : function(xtr,status,error){
+	                    alert(xtr +":"+status+":"+error);
+	            }
+	    });
+	}
+
+</script>
+</head>
+<body>
+<p>search weather</p>
+<input type = "text" name="weather_id" id="weather_id"/>
+<input type = "button" value = "send" onclick="test()"/>
+<h1 id ="a"></h1>
+</body>
+</html>

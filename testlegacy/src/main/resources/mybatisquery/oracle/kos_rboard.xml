@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+          "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+          
+<mapper namespace="com.kos.testlegacy.os.rboard.dao.OsRboardDAO">
+
+<insert id="osRboardInsert" parameterType="osrboardvo" >
+ 
+	INSERT INTO SPRING_RBOARD( 	
+								RBNUM, 
+								BNUM, 
+								RBNAME,
+	                           	RBCONTENT,  
+	                           	DELETEYN,
+	                           	INSERTDATE
+	                        ) 
+	                  VALUES
+	                  		( 	
+	                  			(SELECT 'RB' || LPAD(NVL(MAX(SUBSTR(A.RBNUM, -4)), 0) + 1, 4, 0) AS CHABUN FROM SPRING_RBOARD A), 
+	                  			#{bnum}, 
+	                  			#{rbname},
+	                          	#{rbcontent},  
+	                          	'Y',
+	                          	SYSDATE
+	                        )
+</insert>
+
+
+<select id="osRboardSelectAll" parameterType="osrboardvo" resultType="osrboardvo">
+	
+		SELECT 	A.RBNUM 		RBNUM
+		       ,A.BNUM  		BNUM
+		       ,A.RBNAME 		RBNAME
+		       ,A.RBCONTENT 	RBCONTENT	   
+	           ,A.INSERTDATE 	INSERTDATE
+		FROM 	SPRING_RBOARD A
+		WHERE 	DELETEYN = 'Y' 
+		AND 	A.BNUM = #{bnum}
+		ORDER BY 1 DESC
+</select>
+
+<update id="osRboardDelete" parameterType="osrboardvo">
+	
+	UPDATE 	SPRING_RBOARD 
+	SET 	DELETEYN = 'N', 
+			INSERTDATE = SYSDATE
+	WHERE 	DELETEYN = 'Y' 
+	AND 	RBNUM = #{rbnum}
+	
+</update>
+
+</mapper>      

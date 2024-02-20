@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN" 
+		  "http://mybatis.org/dtd/mybatis-3-config.dtd">
+
+<configuration>
+	<typeAliases>
+		<typeAlias type="com.kos.testlegacy.oracle.vo.EmpVO" alias="empvo"/>	
+		
+		<typeAlias type="com.kos.testlegacy.os.mem.vo.OsMemVO" alias="osmemvo"/>	
+		<typeAlias type="com.kos.testlegacy.os.lecture.vo.OsLectureVO" alias="oslecturevo"/>
+  	    <typeAlias type="com.kos.testlegacy.os.kart.vo.OsKartVO" alias="oskartvo"/>	
+	    <typeAlias type="com.kos.testlegacy.os.kart.vo.OsBuyVO" alias="osbuyvo"/>
+	    <typeAlias type="com.kos.testlegacy.os.rboard.vo.OsRboardVO" alias="osrboardvo"/>	
+	</typeAliases>
+</configuration>

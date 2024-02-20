@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<script  src="http://code.jquery.com/jquery-latest.min.js"></script>
+<script type="text/javascript">
+
+   function test(){
+       var text_data = $('#item_id').val();
+       
+       
+       $.ajax({
+               type : 'GET',                                  <!--GET / POST-->
+               url : 'http://127.0.0.1:5001/rss',
+               data : {
+                       item_id:text_data                       <!--key : "value"-->
+               },
+               dataType : 'JSON',
+               success : function(result){
+                       alert("result = " + result);
+                     
+                       // ① 맑음, ② 구름 많음, ③ 흐림, ④ 비, ⑤ 비/눈
+                  // ⑥ 눈, ⑦ 소나기, ⑧ 빗방울, ⑨ 빗방울/눈날림, ⑩ 눈날림
+                       var img= '';
+                  var wkfor = result.wkfor;
+                  
+                       if(wkfor == "맑음"){
+                          img="https://www.weather.go.kr/home/images/icon/NW/NB01.png";
+                       } else if(wkfor == "구름 많음") {
+                          img="https://www.weather.go.kr/home/images/icon/NW/NB03.png";
+                       }else if(wkfor == "흐림") {
+                          img="https://www.weather.go.kr/home/images/icon/NW/NB04.png";
+                       }else if(wkfor == "비") {
+                          img="https://www.weather.go.kr/home/images/icon/NW/NB08.png";
+                       }else if(wkfor == "비/눈") {
+                          img="https://www.weather.go.kr/home/images/icon/NW/NB12.png";
+                      }else if(wkfor == "눈") {
+                          img="https://www.weather.go.kr/home/images/icon/NW/NB11.png";
+                      }else if(wkfor == "소나기") {
+                          img="https://www.weather.go.kr/home/images/icon/NW/NB07.png";
+                      }else if(wkfor == "빗방울") {
+                          img="https://www.weather.go.kr/home/images/icon/NW/NB20.png";
+                     }else if(wkfor == "빗방울/눈날림") {
+                          img="https://www.weather.go.kr/home/images/icon/NW/NB22.png";
+                     }else if(wkfor == "눈날림") {
+                          img="https://www.weather.go.kr/home/images/icon/NW/NB11.png";
+                     }
+                     
+                       // 결과를 표시할 HTML 문자열
+                       var imgSrc = '<img src="' + img + '"/>' + '<br>';
+                       
+                       var result = result;
+                       
+                       var resultHtml = imgSrc + result
+                       
+                       // "시간: ", hour[i].text, "<br>온도: ", temp[i].text, "<br> 날씨: ", wkfor[i].text
+                    
+                    // 결과를 표시하는 곳에 HTML 추가
+                       $('#a').html(resultHtml);
+               },
+               error : function(xtr,status,error){
+                       alert(xtr +":"+status+":"+error);
+               }
+       });
+   }
+
+</script>
+</head>
+<body>
+<p>find item</p>
+<input type = "text" name="item_id" id="item_id"/>
+<input type = "button" value = "send" onclick="test()"/>
+<h1 id ="a"></h1>
+</body>
+</html>

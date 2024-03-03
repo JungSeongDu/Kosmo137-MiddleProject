@@ -1,0 +1,47 @@
+@charset "UTF-8";
+
+h2 {
+	color: #0b0154;
+}
+
+.mpmdf {
+	height: 600px;
+	width: 300px;
+    border: 1px solid #ccc;
+    padding: 10px;
+    margin-bottom: 20px;
+    margin: 0 auto; /* 가운데 정렬 */
+    background-color: #b1aec2;
+}
+
+.mpmdf div {
+    margin-bottom: 10px;
+}
+
+/* 레이블과 입력 필드를 가로로 정렬 */
+.mpmdf label,
+.mpmdf input[type="text"],
+.mpmdf input[type="button"] {
+    display: inline-block;
+    vertical-align: top;
+}
+
+.mpmdf label {
+    width: 120px;
+}
+
+/* 버튼을 다음 줄로 이동 */
+.mpmdf input[type="button"] {
+    display: block;
+    margin-top: 10px;
+    margin-left: 130px;
+}
+
+.mpmdf .row {
+    display: flex;
+    align-items: center;
+}
+
+.mpmdf .row input[type="button"] {
+    margin-left: 10px;
+}

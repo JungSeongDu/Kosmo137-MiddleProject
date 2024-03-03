@@ -5,7 +5,7 @@
 <meta charset="UTF-8">
 <title>Insert title here</title>
 <script src="http://code.jquery.com/jquery-latest.js"></script>
-<link rel="stylesheet" type="text/css" href="/osProject/include/css/mypage.css">
+<link rel="stylesheet" type="text/css" href="/testlegacy/include/css/mypage.css">
 <script type="text/javascript">
   alert("자바스크립트 진입 >>> : ");
 
